@@ -27,8 +27,8 @@ public:
 	int Read1(uint8_t** buf,int len);      // 读handle1
 	int Read2(uint8_t** buf,int len);      // 读handle2
 	void Close();                          // 关闭句柄
-private:
 	static void Exit();                    // 退出hid
+private:
 	bool Open();                           // 搜索指定的hid并打开
 public:
 	bool isOpen_;

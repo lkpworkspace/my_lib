@@ -34,4 +34,5 @@ void MyThread::ListenThread(void* obj)
 	{
 		t->Run();
 	}
+	t->OnExit();
 }

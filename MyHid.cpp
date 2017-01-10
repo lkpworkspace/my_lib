@@ -87,9 +87,12 @@ void MyHid::Close()
 	for (int i = 0; i < HANDLE_COUNT; ++i)
 	{
 		if (handle_[i] != nullptr)
+		{
 			hid_close(handle_[i]);
+			handle_[i] = nullptr;
+		}
+			
 	}
-	Exit();
 }
 
 // 1 不阻塞； 0 阻塞；
