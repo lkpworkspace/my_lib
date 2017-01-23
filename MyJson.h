@@ -1,84 +1,97 @@
-/*
-	该类使用jsoncpp库
-*/
 #ifndef __MyJson_H__
 #define __MyJson_H__
 #include "json/json.h"
 #include <string>
+#include <vector>
+
+//config.json(以下为json文件的内容)
+//{
+//    "Algorithm":
+//    {
+//         "some":"thing",
+//         "okok":"nono",
+//         "xxxx":{
+//			  "yyy":123.456
+//         }
+//    },
+//    "SDK":{
+//        "framelen":28
+//    }
+//}
+//访问Json文件示例
+//int main()
+//{
+//	MyJson json("config.json");
+//	// 访问yyy对应的值
+//	std::string str = json.GetStringValue("Algorithm.xxxx.yyy");
+//  if(json.isOk_)
+//      // 赋值给程序中的变量
+//
+//	// 写入文件
+//	json.Write();
+//
+//  // 注： 获得浮点数时最好使用GetDoubleValue,而不要使用GetFloatValue
+//}
 
 class MyJson
 {
 public:
-	MyJson(char*);
+	MyJson(const char*);
 	~MyJson();
+	//////////////////////////////////////////////
+	////////////////single instance
+	//static MyJson* GetInstance();
+	//////////////////////////////////////////////
+	////////////////get value
+	float GetFloatValue(std::string name, std::string key);
+	double GetDoubleValue(std::string name, std::string key);
+	int GetIntValue(std::string name, std::string key);
+	std::string GetStringValue(std::string name, std::string key);
+	bool GetBoolValue(std::string name, std::string key);
+
+	float GetFloatValue(Json::Value&);
+	double GetDoubleValue(Json::Value&);
+	int GetIntValue(Json::Value&);
+	std::string GetStringValue(Json::Value&);
+	bool GetBoolValue(Json::Value&);
+
+	float GetFloatValue(std::string);
+	double GetDoubleValue(std::string);
+	int GetIntValue(std::string);
+	std::string GetStringValue(std::string);
+	bool GetBoolValue(std::string);
+	//////////////////////////////////////////////
+	////////////////set value
+	void SetFloatValue(std::string name, std::string key, float value);
+	void SetDoubleValue(std::string name, std::string key, double value);
+	void SetIntValue(std::string name, std::string key, int value);
+	void SetStringValue(std::string name, std::string key, std::string value);
+	void SetBoolValue(std::string name, std::string key, bool value);
+	//////////////////////////////////////////////
 	////////////////read
-	// std::string GetString(std::string);
-	// int GetInt(std::string);
 	// 获得根节点
 	Json::Value& Get() { return root_; }
 	/////////////////////////////////////////////
 	///////////////write to file
 	bool Write();
 	/////////////////////////////////////////////
+	///////////////print json
+	std::string GetContent();
+	////////////////////////////////////////////
+	///////////////close Json
 	void Close();
+public:
+	bool isOk_;
 private:
 	void ParseFile(std::ifstream& stream);
+	std::vector<std::string> ParseString(std::string);
+	Json::Value GetValue(std::vector<std::string> vec);
 private:
-	std::string filename_;
-	Json::Reader reader_;
-	Json::Value root_;
+	//static MyJson* m_pInstance;
+	std::string filename_;     // json文件名
+	Json::Reader reader_;      // 分析json的文件类
+	Json::Value root_;         // json的根节点
 	//Json::FastWriter writer_;
-	bool isOpen_;
-	bool isOk_;
 };
-
-// read example
-// std::cout << json.Get()["framelen"].asInt();
-// std::cout << json.Get()["drivers"][0]["plugin"].asString();
-
-// config.json文件：
-// {
-//	 "framelen":28,
-//	 	"VID" : "2700",
-//		"PID" : "2000",
-//	 	"drivers" : [{
-//			"plugin": "com_osvr_Multiserver",
-//			"driver" : "YEI_3Space_Sensor"
-//		}]
-// }
-
-// write example
-//	Json::Value arrayObj;   // 构建对象  
-//	Json::Value new_item, new_item1;
-//	new_item["date"] = "2011-11-11";
-//	new_item1["time"] = "11:11:11";
-//	arrayObj.append(new_item);  // 插入数组成员  
-//	arrayObj.append(new_item1); // 插入数组成员  
-//	json.get()["state"] = arrayObj;
-
-
-// DEMO
-//int main()
-//{
-//	MyJson json("config.json");
-//
-//	// read
-//	std::cout << json.Get()["framelen"].asInt() << std::endl;
-//	std::cout << json.Get()["PID"] << std::endl;
-//
-//	// write
-//	Json::Value test;
-//	test = "xxx";
-//	json.Get()["test"] = test;
-//
-//	//print
-//	std::cout << json.Get().toStyledString();
-//
-//	// write to file
-//	json.Write();
-//
-//	std::cin.get();
-//	return 0;
-//}
 
 #endif
