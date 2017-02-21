@@ -1,7 +1,7 @@
 #include "MySerialPort.h"
-#include <qdebug.h>
 
 MySerialPort::MySerialPort()
+	:portNum_(0)
 {
 	port_ = INVALID_HANDLE_VALUE;
 	InitializeCriticalSection(&critical_section_);
@@ -58,12 +58,18 @@ int MySerialPort::SearchComNo(std::string comName)
 	SearchCom();
 	for (int i = 0; i < cominfo_buf_.size(); ++i)
 	{
-		if (cominfo_buf_[i].ComName.find(comName) == 0)
+		if (cominfo_buf_[i].ComName.find(comName) != std::string::npos)
 		{
-			return cominfo_buf_[i].comId;
+			portNum_ = cominfo_buf_[i].comId;
+			return portNum_;
 		}
 	}
 	return 0;
+}
+
+bool MySerialPort::OpenPort()
+{
+	return OpenPort(portNum_);
 }
 
 bool MySerialPort::OpenPort(int comNo)
@@ -97,6 +103,18 @@ bool MySerialPort::OpenPort(int comNo)
 		LeaveCriticalSection(&critical_section_);
 		return false;
 	}
+	// 新加的
+	/*
+	COMMTIMEOUTS ct;
+	ct.ReadIntervalTimeout = 0;
+	ct.ReadTotalTimeoutConstant = 3;
+	ct.ReadTotalTimeoutMultiplier = 0;
+	ct.WriteTotalTimeoutConstant = 3;
+	ct.WriteTotalTimeoutMultiplier = 0;
+	SetCommTimeouts(port_,&ct);
+	SetupComm(port_,28,28);
+	*/
+	// end
 	PurgeComm(port_, PURGE_RXCLEAR | PURGE_TXCLEAR | PURGE_RXABORT | PURGE_TXABORT);
 	LeaveCriticalSection(&critical_section_);
 	return true;
@@ -108,15 +126,22 @@ bool MySerialPort::ClosePort()
 	{
 		CloseHandle(port_);
 		port_ = INVALID_HANDLE_VALUE;
+		return true;
 	}
-	return true;
+	return false; // 代表串口为空
 }
 
 bool MySerialPort::SendCmd(uint8_t *data_buf, int len)
 {
 	DWORD bytes_to_send = 0;
 
-	if (port_ == INVALID_HANDLE_VALUE) { return false; }
+	if (port_ == INVALID_HANDLE_VALUE) {
+		/*if (!OpenPort())
+		{
+			return false;
+		}*/
+		return false; 
+	}
 	EnterCriticalSection(&critical_section_);
 	bool result = WriteFile(port_, data_buf, len, &bytes_to_send, NULL); // write data to sensor buffer
 	if (!result)
