@@ -2,6 +2,7 @@
 #define __MyWin32Help_H__
 #include <Windows.h>
 #include <TlHelp32.h>
+#include <string>
 
 class MyWin32Help
 {
@@ -35,6 +36,24 @@ public:
 		WaitForSingleObject(hTempEvent, msecs);
 		CloseHandle(hTempEvent);
 		return 0;
+	}
+
+	// 获得当前时间
+	static std::string GetCurTime()
+	{
+		SYSTEMTIME sys;
+		char buf[64] = { 0 };
+
+		GetLocalTime(&sys);
+		sprintf(buf,"%4d/%02d/%02d %02d:%02d:%02d.%03d", 
+			sys.wYear, 
+			sys.wMonth, 
+			sys.wDay, 
+			sys.wHour, 
+			sys.wMinute, 
+			sys.wSecond, 
+			sys.wMilliseconds);
+		return std::string(buf);
 	}
 
 };

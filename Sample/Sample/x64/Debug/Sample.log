@@ -1,0 +1,28 @@
+﻿Build started 2017/2/26 4:28:06.
+     1>Project "C:\Users\kpli\Desktop\my_lib\Sample\Sample\Sample.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt ..\..\MyHelp.cpp main.cpp
+         main.cpp
+     1>c:\users\kpli\desktop\my_lib\sample\sample\../../MyWin32Help.h(48): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(356) : see declaration of 'sprintf'
+         MyHelp.cpp
+     1>..\..\MyHelp.cpp(49): warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _itoa. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdlib.h(937) : see declaration of 'itoa'
+     1>..\..\MyHelp.cpp(55): warning C4996: 'ltoa': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _ltoa. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdlib.h(938) : see declaration of 'ltoa'
+     1>..\..\MyHelp.cpp(61): warning C4996: 'ultoa': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _ultoa. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdlib.h(945) : see declaration of 'ultoa'
+     1>..\..\MyHelp.cpp(70): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
+     1>..\..\MyHelp.cpp(74): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
+     1>..\..\MyHelp.cpp(91): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\time.inl(112) : see declaration of 'localtime'
+         Generating Code...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.lib" /MACHINE:X64 x64\Debug\MyHelp.obj
+         x64\Debug\main.obj
+         Sample.vcxproj -> C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.exe
+     1>Done Building Project "C:\Users\kpli\Desktop\my_lib\Sample\Sample\Sample.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.84
