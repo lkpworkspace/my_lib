@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
+#include <stdint.h>
 
 class MyHelp
 {
@@ -24,5 +25,11 @@ public:
 	static std::vector<std::string> SplitStr(std::string str, char split);
 	// 获得当前时间
 	static std::string GetCurTime();
+	// 校验和
+	static uint8_t CheckSum(uint8_t* buf, int len);
+	// min : include; max : exclude
+	static uint8_t RandomNum(int min, int max); // 生成一字节的随机数
+	// 将一个buf中的16进制数转换成字符串的16进制数
+	static std::string ToMutlStr(uint8_t* buf, int len);
 };
 #endif

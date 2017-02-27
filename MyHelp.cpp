@@ -91,6 +91,11 @@ std::string MyHelp::GetCurTime()
 	strftime(tmp, sizeof(tmp), "%Y/%m/%d %X", localtime(&now_time));
 	return std::string(tmp);
 }
+//struct tm *localtime(const time_t *timer)返回一个以tm结构表达的机器时间信息
+//char* asctime(struct tm * ptr)得到机器时间(日期时间转换为ASCII码)
+//char *ctime(const time_t *time)得到日历时间
+//double difftime(time_t time2, time_t time1)得到两次机器时间差，单位为秒
+//struct tm *gmtime(time_t *time)得到以结构tm表示的时间信息
 //size_t strftime(char *strDest, size_t maxsize, const char *format, const struct tm *timeptr);
 //根据格式字符串生成字符串。
 //struct tm *localtime(const time_t *timer);
@@ -119,6 +124,51 @@ std::string MyHelp::GetCurTime()
 //% Z(%z) 时区或名称缩写。Eg : 中国标准时间
 //%% % 字符。
 
+uint8_t MyHelp::CheckSum(uint8_t* buf, int len)
+{
+	uint8_t checksum = 0x00;
+	for (int i = 0; i < len - 1; ++i)
+	{
+		checksum += buf[i];
+	}
+	return checksum;
+}
 
+// min : include; max : exclude
+uint8_t MyHelp::RandomNum(int min, int max) // 生成一字节的随机数
+{
+	uint8_t temp = 0x00;
 
+	if (max < min) return 0x00;
+	temp = rand() % (max - min) + min;
+	return temp;
+}
+std::string MyHelp::ToMutlStr(uint8_t* buf, int len)
+{
+	std::string temp;
+	uint8_t *temp_buf1 = new uint8_t[len * 2];
+	char temp_buf2[4] = { 0 };
+	int j = 0;
+
+	temp += "  ";
+	memset(temp_buf1, 0, len * 2);
+	for (int i = 0; i < len * 2; i += 2)
+	{
+		temp_buf1[i] = buf[j++];
+		sprintf(temp_buf2, "%x", temp_buf1[i]);
+		if (temp_buf1[i] <= 0x0f)
+		{
+			temp += '0';
+			temp += temp_buf2;
+		}
+		else
+		{
+			temp += temp_buf2;
+		}
+		temp += " ";
+		memset(temp_buf2, 0, 4);
+	}
+	delete temp_buf1;
+	return temp;
+}
 
