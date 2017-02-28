@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <stdint.h>
+#include <chrono>
 
 class MyHelp
 {
@@ -25,6 +26,7 @@ public:
 	static std::vector<std::string> SplitStr(std::string str, char split);
 	// 获得当前时间
 	static std::string GetCurTime();
+	static std::time_t GetTimeStamp();
 	// 校验和
 	static uint8_t CheckSum(uint8_t* buf, int len);
 	// min : include; max : exclude

@@ -123,6 +123,12 @@ std::string MyHelp::GetCurTime()
 //%Y 完整的年份数字表示，即四位数。 Eg : 2008
 //% Z(%z) 时区或名称缩写。Eg : 中国标准时间
 //%% % 字符。
+std::time_t MyHelp::GetTimeStamp()
+{
+	std::chrono::time_point<std::chrono::system_clock, std::chrono::milliseconds> tp = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
+	auto tmp = std::chrono::duration_cast<std::chrono::milliseconds>(tp.time_since_epoch());
+	return tmp.count();
+}
 
 uint8_t MyHelp::CheckSum(uint8_t* buf, int len)
 {
