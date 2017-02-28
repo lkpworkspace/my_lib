@@ -1,5 +1,6 @@
 #include "../../MyHelp.h"
 #include "../../MyWin32Help.h"
+#include "../../MyHid.h"
 #include <iostream>
 
 int main()

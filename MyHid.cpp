@@ -44,91 +44,41 @@ bool MyHid::Open()
 	for (int i = 0; cur_dev_ != nullptr; ++i, cur_dev_ = cur_dev_->next)
 	{
 		handle_[i] = hid_open_path(cur_dev_->path);
-		if (!handle_[i]) return false;
+		if (!handle_[i])
+		{
+			isOpen_ = false;
+			return false;
+		}	
 	}
-	if (handle_[0] != nullptr || handle_[1] != nullptr)
-		isOpen_ = true;
+	//if (handle_[0] != nullptr || handle_[1] != nullptr)
+		//isOpen_ = true;
 	hid_free_enumeration(devs_);
 	return true;
 }
 
-bool MyHid::SendCmd(uint8_t* buf, int len)
+bool MyHid::SendCmd(uint8_t* buf, int len, int iface)
 {
-	int isSuccess = false;
-
 	if (!isOpen_)
-		if (!Open())
-			return false;
-	for (int i = 0; i < HANDLE_COUNT; ++i)
+		return false;
+	if (handle_[iface])
 	{
-		if (handle_[i])
-		{
-			int res = hid_write(handle_[i], buf, len);
-			if (res <= 0)
-				continue;
-			else
-				isSuccess = true;
-		}
+		int res = hid_write(handle_[iface], buf, len);
+		if (res <= 0)
+			return false;
 		else
-		{
-			break;
-		}
+			return true;
 	}
-	if (isSuccess)
-		return true;
 	return false;
 }
 
-
-void MyHid::Close()
-{
-	isInit_ = false;
-	isOpen_ = false;
-	for (int i = 0; i < HANDLE_COUNT; ++i)
-	{
-		if (handle_[i] != nullptr)
-		{
-			hid_close(handle_[i]);
-			handle_[i] = nullptr;
-		}
-			
-	}
-}
-
-// 1 不阻塞； 0 阻塞；
-void MyHid::SetBlock(int b)
-{
-	for (int i = 0; i < HANDLE_COUNT; ++i)
-	{
-		if (handle_[i])
-			hid_set_nonblocking(handle_[i], b);
-	}
-}
-
-
-int MyHid::Read1(uint8_t** buf, int len)
+int MyHid::Read(uint8_t** buf, int len, int iface)
 {
 	if (!isOpen_)
-		if (!Open())
-			return false;
-
-	if (handle_[0] == nullptr) return 0;
+		return false;
+	if (handle_[iface] == nullptr) return 0;
 	memset(buf_read1_, 0, 65);
-	int res = hid_read(handle_[0], buf_read1_, len);
+	int res = hid_read(handle_[iface], buf_read1_, len);
 	*buf = buf_read1_;
-	return res;
-}
-
-int MyHid::Read2(uint8_t** buf, int len)
-{
-	if (!isOpen_)
-		if (!Open())
-			return false;
-
-	if (handle_[1] == nullptr) return 0;
-	memset(buf_read2_, 0, 65);
-	int res = hid_read(handle_[1], buf_read2_, len);
-	*buf = buf_read2_;
 	return res;
 }
 
@@ -150,6 +100,31 @@ bool MyHid::Search()
 	// 搜索到该设备，释放hid设备信息链表
 	hid_free_enumeration(devs);
 	return true;
+}
+
+
+void MyHid::Close()
+{
+	isInit_ = false;
+	isOpen_ = false;
+	for (int i = 0; i < HANDLE_COUNT; ++i)
+	{
+		if (handle_[i] != nullptr)
+		{
+			hid_close(handle_[i]);
+			handle_[i] = nullptr;
+		}
+	}
+}
+
+// 1 不阻塞； 0 阻塞；
+void MyHid::SetBlock(int b)
+{
+	for (int i = 0; i < HANDLE_COUNT; ++i)
+	{
+		if (handle_[i])
+			hid_set_nonblocking(handle_[i], b);
+	}
 }
 
 void MyHid::Exit()
