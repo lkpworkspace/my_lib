@@ -3,8 +3,9 @@ CONFIG += console c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
+LIBS += -lpthread
+
 SOURCES += main.cpp \
-    MyProcess.cpp \
     Common.cpp \
     MySock.cpp \
     MyNet.cpp \
@@ -13,11 +14,11 @@ SOURCES += main.cpp \
     MyApp.cpp
 
 HEADERS += \
-    MyProcess.h \
     Common.h \
-    MySubThread.h \
     MySock.h \
     MyNet.h \
     MyThread.h \
     MyEvent.h \
-    MyApp.h
+    MyApp.h \
+    MyList.h \
+    MyVec.h

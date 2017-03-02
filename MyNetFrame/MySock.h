@@ -1,32 +1,41 @@
 #ifndef MYSOCK_H
 #define MYSOCK_H
 #include "MyNet.h"
-#include <sys/types.h>
-#include <unistd.h>
-#include <stdint.h>
-#include<string>
+#include "Common.h"
+
+/*
+* type: low ----> height
+*    1bit: 0 server; 1 client;
+*    2bit: 1 tcp
+*    3bit: 1 udp
+*/
+#define IS_SERVER(type) (type & 0x01)
+#define IS_TCP(type) (type & 0x02)
+#define IS_UDP(type) (type & 0x04)
 
 class MySock // TCP or UDP; server or client
 {
+    friend class MyEvent;
 public:
-    MySock(std::string ip,uint16_t port,int type = SOCK_STREAM);
-    ~MySock();
+    MySock(std::string ip,uint16_t port,int type = SOCK_STREAM, bool isServer = true);
+    ~MySock(){Close();}
 
 public:
-    int Read();
-    int Write();
-
-    int Socket(int domin, int type, int protocol);//ok
+    int Read(char* buf,int len);
+    int Write(char*buf,int len);
     int Bind(); // ok
     int Listen(int backlog = 10);// ok
     int Connect(); // ok
-    int Accpet(); // ok
+    int Accpet(struct sockaddr *addr, socklen_t *addrlen); // ok
     int Close(); // ok
-    int SetNonblock(); // ok
+    int SetNonblock(bool b = true); // ok
 private:
-    std::string ip_;
-    int sock_;
-    uint16_t port_;
+    int Socket(int domin, int type, int protocol);//ok
+private:
+    uint8_t m_class_type;          // tcp/udp or server/client
+    std::string m_ip;              // if server, bind ip; if client, connect ip.
+    int m_sock;                    // socket file descritor
+    uint16_t m_port;               // if server, bind port; if client, connect port
 };
 // client:
 //      connect();
@@ -38,8 +47,6 @@ private:
 //      accept();
 //      read or write
 //      close();
-
-
 
 // socket api
 //int Socket(int domin = AF_INET, int type = SOCK_STREAM, int protocol = 0);

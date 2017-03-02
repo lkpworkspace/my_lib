@@ -1,12 +1,23 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
+// c++ normal
 #include <iostream>
+#include <string>
+#include <cassert>
+#include <cstdint>
+#include <string>
+#include <cstdlib>
+// c++ stl
+#include <list>
+#include <vector>
 #include <queue>
 #include <map>
-#include <string>
-#include <assert.h>
-#include "MyNet.h"
-#include "MySock.h"
+// win or linux
+#ifdef WIN32
+#include <Windows.h>
+#else
+#include <unistd.h>
+#endif
 
 class Common
 {
