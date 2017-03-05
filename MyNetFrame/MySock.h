@@ -32,10 +32,11 @@ public:
 private:
     int Socket(int domin, int type, int protocol);//ok
 private:
-    uint8_t m_class_type;          // tcp/udp or server/client
+    uint8_t m_class_type;          // tcp/udp or server/client.
     std::string m_ip;              // if server, bind ip; if client, connect ip.
-    int m_sock;                    // socket file descritor
-    uint16_t m_port;               // if server, bind port; if client, connect port
+    int m_sock;                    // socket file descritor.
+    uint16_t m_port;               // if server, bind port; if client, connect port.
+    struct sockaddr_in m_addr;     // if server, save self addr; if client, save client addr.
 };
 // client:
 //      connect();

@@ -17,11 +17,24 @@
 #include <Windows.h>
 #else
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #endif
+// my class
+#include "MyVec.h"
+#include "MyList.h"
 
 class Common
 {
 public:
+    static bool SetNonblock(int fd, bool b);
+    static int GetFileLen(const char* path);
+    static bool IsFileExist(const char* path);
+    static bool IsDirExist(const char* path);
+    static char* GetHomeDir();
+private:
     Common();
     ~Common();
 };

@@ -8,6 +8,7 @@ MySock::MySock(std::string ip, uint16_t port, int type, bool isServer) // type: 
       m_ip(ip),
       m_class_type(0x00)
 {
+    memset(&m_addr,0,sizeof(struct sockaddr_in));
     m_sock = Socket(AF_INET,type,0);
 
     if(isServer)
@@ -59,13 +60,13 @@ int MySock::Write(char* buf,int len)
 int MySock::Connect()
 {
     int ret;
-    struct sockaddr_in addr;
+    //struct sockaddr_in addr;
 
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(m_port);
-    inet_pton(AF_INET, m_ip.c_str(), &addr.sin_addr);
+    m_addr.sin_family = AF_INET;
+    m_addr.sin_port = htons(m_port);
+    inet_pton(AF_INET, m_ip.c_str(), &m_addr.sin_addr);
 
-    ret = connect(m_sock, (struct sockaddr*)&addr, sizeof(addr));
+    ret = connect(m_sock, (struct sockaddr*)&m_addr, sizeof(m_addr));
     assert(ret == 0);
     return ret;
 }
@@ -73,10 +74,7 @@ int MySock::Connect()
 // setting nonblocking
 int MySock::SetNonblock(bool b)
 {
-    int flags = fcntl(m_sock, F_GETFL, 0);
-    if(b)
-        flags |= O_NONBLOCK;
-    return fcntl(m_sock, F_SETFL, flags);
+    return Common::SetNonblock(m_sock,b);
 }
 int MySock::Socket(int domin, int type, int protocol)
 {
@@ -87,16 +85,15 @@ int MySock::Socket(int domin, int type, int protocol)
 int MySock::Bind()
 {
     int res;
-    struct sockaddr_in addr;
 
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(m_port);
+    m_addr.sin_family = AF_INET;
+    m_addr.sin_port = htons(m_port);
     if(!m_ip.empty())
-        inet_pton(AF_INET, m_ip.c_str(), &addr.sin_addr);
+        inet_pton(AF_INET, m_ip.c_str(), &m_addr.sin_addr);
     else
-        addr.sin_addr.s_addr = INADDR_ANY;
+        m_addr.sin_addr.s_addr = INADDR_ANY;
 
-    res = bind(m_sock, (struct sockaddr*)&addr, sizeof(addr));
+    res = bind(m_sock, (struct sockaddr*)&m_addr, sizeof(m_addr));
     assert(res == 0);
     return res;
 }
