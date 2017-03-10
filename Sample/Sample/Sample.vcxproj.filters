@@ -27,6 +27,9 @@
     <ClCompile Include="..\..\hid.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\MyLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MyHelp.h">
@@ -39,6 +42,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\hidapi.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\MyLog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

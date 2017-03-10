@@ -1,5 +1,5 @@
 #include "MyHelp.h"
-#include <ctime>
+#include <chrono>
 
 // ×Ö·û´®×ªÊý×Ö
 int MyHelp::ToInt(const char *str)

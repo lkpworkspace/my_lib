@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <string>
+#include <mmstream.h>
+#pragma comment(lib, "WINMM.LIB")
 
 class MyWin32Help
 {
