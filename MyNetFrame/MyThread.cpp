@@ -1,37 +1,38 @@
 #include "MyThread.h"
-
+using namespace my_master;
 MyThread::MyThread()
 {
-	thread_ = nullptr;
-	isRuning_ = false;
+    m_thread = nullptr;
+    m_isRuning = false;
 }
 
 MyThread::~MyThread()
-{}
+{ Stop(); }
 
 void MyThread::Start()
 {
-	if (!thread_)
+    if (!m_thread)
 	{
-		isRuning_ = true;
-		thread_ = new std::thread(&MyThread::ListenThread,this);
-		thread_->detach();
+        m_isRuning = true;
+        m_thread = new std::thread(&MyThread::ListenThread,this);
+        m_id = m_thread->get_id();
+        m_thread->detach();
 	}	
 }
 
 void MyThread::Stop()
 {
-	isRuning_ = false;
-	if (thread_)
-		delete thread_;
-	thread_ = nullptr;
+    m_isRuning = false;
+    if (m_thread)
+        delete m_thread;
+    m_thread = nullptr;
 }
 
 void MyThread::ListenThread(void* obj)
 {
 	MyThread* t = (MyThread*)obj;
     t->OnInit();
-	while (t->isRuning_)
+    while (t->m_isRuning)
 	{
 		t->Run();
 	}

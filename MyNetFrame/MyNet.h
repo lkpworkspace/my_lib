@@ -13,6 +13,8 @@
 #include <netdb.h>
 #endif
 
+namespace my_master {
+
 class MyNet
 {
 public:
@@ -20,4 +22,5 @@ public:
     ~MyNet();
 };
 
+} // end namespace
 #endif // MYNET_H

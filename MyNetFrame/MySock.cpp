@@ -1,13 +1,17 @@
 #include "MySock.h"
 #include <fcntl.h>
 #include <assert.h>
-
+#include "MyEvent.h"
+using namespace my_master;
 MySock::MySock(std::string ip, uint16_t port, int type, bool isServer) // type: TCP/UDP
     :m_sock(-1),
       m_port(port),
       m_ip(ip),
       m_class_type(0x00)
 {
+    // init event class
+    this->m_type = MyEvent::SOCK;
+
     memset(&m_addr,0,sizeof(struct sockaddr_in));
     m_sock = Socket(AF_INET,type,0);
 
@@ -71,7 +75,11 @@ int MySock::Connect()
     return ret;
 }
 /////////////////////////////////////////////////// share
-// setting nonblocking
+void* MySock::Callback(void *)
+{
+    return NULL;
+}
+/// setting nonblocking
 int MySock::SetNonblock(bool b)
 {
     return Common::SetNonblock(m_sock,b);

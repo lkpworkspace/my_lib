@@ -1,10 +1,20 @@
-#include <iostream>
+#include "MyLog.h"
 #include "MySock.h"
-#include <stdio.h>
 
 using namespace std;
+using namespace my_master;
+#define TEST
 
-#if 0
+#ifdef TEST
+int main()
+{
+    MyDebug("okooook");
+    MyLog::SetLogPath("okok.txt");
+    MyDebug("sha");
+    printf("%s\n",__LINE__);
+}
+#else
+#if 1
 // server
 int main(int argc, char *argv[])
 {
@@ -41,4 +51,5 @@ int main(int argc, char *argv[])
     }
     return 0;
 }
+#endif
 #endif

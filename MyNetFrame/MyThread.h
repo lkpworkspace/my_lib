@@ -2,6 +2,7 @@
 #define __MyThread_H__
 #include <thread>
 #include <mutex>
+namespace my_master {
 
 class MyThread
 {
@@ -14,12 +15,14 @@ public:
 	void Start();
 	void Stop();
 public:
-	std::mutex mutex_;
+    std::mutex m_mutex;
+    std::thread::id m_id;
 protected:
 	static void ListenThread(void*);
 private:
-	std::thread* thread_;
-	bool isRuning_;
+    std::thread* m_thread;
+    bool m_isRuning;
 };
 
+} // end namespace
 #endif

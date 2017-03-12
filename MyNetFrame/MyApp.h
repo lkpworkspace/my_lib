@@ -1,23 +1,33 @@
 #ifndef MYAPP_H
 #define MYAPP_H
 #include "Common.h"
+namespace my_master {
 
-class MyThread;
+class MyTask;
 class MyEvent;
-
-class MyApp
+class MyApp : public MyThread
 {
 public:
-    MyApp();
+    MyApp(int ev_size, int thread_size);
     ~MyApp();
 
     int Init();
-    int Run();
-
+    int AddEvent(MyEvent*);
+    int DelEvent(MyEvent*);
+    int Exec();
 private:
-    std::queue<MyThread*> work_threads_;
-    std::queue<MyThread*> idle_threads_;
-    std::queue<MyEvent*> msg_queue_;
+    void Run();        // override (do nothing)
+    void OnInit();
+    void OnExit();
+    int CreateTask();
+private:
+    my_master::MyList<MyTask*> work_threads_;
+    my_master::MyList<MyTask*> idle_threads_;
+    my_master::MyList<MyEvent*> msg_queue_;
+    int m_epollFd;
+    int m_evSize;
+    int m_threadSize;
 };
 
+}
 #endif // MYAPP_H

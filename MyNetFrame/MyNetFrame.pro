@@ -11,7 +11,10 @@ SOURCES += main.cpp \
     MyNet.cpp \
     MyThread.cpp \
     MyEvent.cpp \
-    MyApp.cpp
+    MyApp.cpp \
+    MyLog.cpp \
+    MyHelp.cpp \
+    MyTask.cpp
 
 HEADERS += \
     Common.h \
@@ -21,4 +24,7 @@ HEADERS += \
     MyEvent.h \
     MyApp.h \
     MyList.h \
-    MyVec.h
+    MyVec.h \
+    MyLog.h \
+    MyHelp.h \
+    MyTask.h

@@ -207,7 +207,7 @@ void MyList<T>::MoveTail(MyNode_list<T>* node)
 template<typename T>
 void MyList<T>::Append(MyList<T>* to, MyList<T>* from/*don't invoke*/)
 {
-    // ...
+    // TODO...
     //    if(from->IsEmpty()) return;
 
     //    MyList<T>* from_tail = from->__GetData(0);

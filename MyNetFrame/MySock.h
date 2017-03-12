@@ -3,6 +3,8 @@
 #include "MyNet.h"
 #include "Common.h"
 
+namespace my_master {
+
 /*
 * type: low ----> height
 *    1bit: 0 server; 1 client;
@@ -13,13 +15,13 @@
 #define IS_TCP(type) (type & 0x02)
 #define IS_UDP(type) (type & 0x04)
 
-class MySock // TCP or UDP; server or client
+class MySock : public MyEvent// TCP or UDP; server or client
 {
-    friend class MyEvent;
+    friend class MyApp;
 public:
     MySock(std::string ip,uint16_t port,int type = SOCK_STREAM, bool isServer = true);
     ~MySock(){Close();}
-
+    virtual void* Callback(void *);
 public:
     int Read(char* buf,int len);
     int Write(char*buf,int len);
@@ -38,6 +40,8 @@ private:
     uint16_t m_port;               // if server, bind port; if client, connect port.
     struct sockaddr_in m_addr;     // if server, save self addr; if client, save client addr.
 };
+
+} // end namespace
 // client:
 //      connect();
 //      read or write
