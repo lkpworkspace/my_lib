@@ -14,7 +14,10 @@ SOURCES += main.cpp \
     MyApp.cpp \
     MyLog.cpp \
     MyHelp.cpp \
-    MyTask.cpp
+    MyTask.cpp \
+    MyList.cpp \
+    MyUdp.cpp \
+    MyTcp.cpp
 
 HEADERS += \
     Common.h \
@@ -27,4 +30,6 @@ HEADERS += \
     MyVec.h \
     MyLog.h \
     MyHelp.h \
-    MyTask.h
+    MyTask.h \
+    MyUdp.h \
+    MyTcp.h

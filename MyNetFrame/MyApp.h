@@ -3,30 +3,30 @@
 #include "Common.h"
 namespace my_master {
 
-class MyTask;
-class MyEvent;
 class MyApp : public MyThread
 {
 public:
-    MyApp(int ev_size, int thread_size);
+    MyApp(int thread_size = 2,int ev_size = 1024);
     ~MyApp();
 
-    int Init();
-    int AddEvent(MyEvent*);
-    int DelEvent(MyEvent*);
-    int Exec();
+    int AddEvent(MyEvent* ev);
+    int DelEvent(MyEvent* ev);
+    int Exec();                        // mainloop
 private:
-    void Run();        // override (do nothing)
-    void OnInit();
-    void OnExit();
-    int CreateTask();
+    int InitApp();
+    void Run();                        // override Mythread method (do nothing)
+    void OnInit();                     // override Mythread method (do nothing)
+    void OnExit();                     // override Mythread method (do nothing)
+    int CreateTask();                  // create thread
 private:
-    my_master::MyList<MyTask*> work_threads_;
-    my_master::MyList<MyTask*> idle_threads_;
-    my_master::MyList<MyEvent*> msg_queue_;
-    int m_epollFd;
-    int m_evSize;
-    int m_threadSize;
+    my_master::MyList m_work_tasks;    // save MyTask class
+    my_master::MyList m_idle_tasks;    // save MyTask class
+    my_master::MyList m_ev_recv;       // recv task event, save MyEvent class
+    int m_epollFd;                     // listen Event file des
+    int m_evSize;                      // can be listened (const var)
+    int m_threadSize;                  // thread size (const var)
+    int m_cur_thread_size;             // how many task was create
+    int m_cur_ev_size;                 // how many ev was create
 };
 
 }

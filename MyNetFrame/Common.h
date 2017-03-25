@@ -1,5 +1,7 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
+// c normal
+#include <stdio.h>
 // c++ normal
 #include <iostream>
 #include <cstdio>
@@ -18,19 +20,32 @@
 // win or linux
 #ifdef WIN32
 #include <Windows.h>
+#include <WinSock2.h>
+#pragma comment(lib,"ws2_32.lib")
 #else
-#include <unistd.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
 #endif
 // my class
+#include "MyLog.h"
 #include "MyHelp.h"
 #include "MyVec.h"
 #include "MyList.h"
 #include "MyEvent.h"
 #include "MyThread.h"
+
+#define USE_LOG
+
+#ifndef DEBUG_INFO
+#define DEBUG_INFO 1
+#endif
+
+#ifndef DEBUG_WARNING
+#define DEBUG_WARNING 0
+#endif
+
+#ifndef DEBUG_ERROR
+#define DEBUG_ERROR 1
+#endif
 
 class Common
 {

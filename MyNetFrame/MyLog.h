@@ -5,7 +5,7 @@
 
 namespace my_master {
 
-#define LOG_NAME "mylog.log"
+#define LOG_NAME "mynet.log"
 #define MAX_PATH 255
 
 class MyLog
@@ -26,7 +26,7 @@ private:
     static MyLog* instance;
 };
 
-#define MyDebug(str) do \
+#define __MyDebug(str) do \
     { \
         std::string temp; \
         temp += __FILE__; \
@@ -39,5 +39,13 @@ private:
         my_master::MyLog::GetInstance()->AddLog(temp); \
     }while(0)
 
+#define MyDebug(format,...) do \
+    { \
+        char buf[2048] = {0}; \
+        memset(buf,0,sizeof(buf)); \
+        sprintf(buf,format,__VA_ARGS__); \
+        __MyDebug(buf); \
+    }while(0)
+
 } // end namespace
-#endif // MyLog_h__
+#endif // MyLog_h

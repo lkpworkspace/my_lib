@@ -1,11 +1,11 @@
 #include "MyEvent.h"
 using namespace my_master;
 MyEvent::MyEvent()
-{
-    this->m_type = EVENT_TYPE::NONE;
-}
+    :m_callback(nullptr)
+{}
 
-MyEvent::MyEvent(EVENT_TYPE type)
-{
-    this->m_type = type;
-}
+MyEvent::~MyEvent()
+{}
+
+void MyEvent::SetCallBack(callback_t cb)
+{ m_callback = cb; }

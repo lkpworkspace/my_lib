@@ -1,24 +1,55 @@
-#include "MyLog.h"
-#include "MySock.h"
+#include "Common.h"
+#include "MyTcp.h"
+#include "MyApp.h"
 
-using namespace std;
 using namespace my_master;
-#define TEST
+//#define TEST
 
 #ifdef TEST
+class A : public MyNode
+{
+public:
+    A(int a){
+        this->a = a;
+    }
+    int a;
+};
+
 int main()
 {
-    MyDebug("okooook");
-    MyLog::SetLogPath("okok.txt");
-    MyDebug("sha");
-    printf("%s\n",__LINE__);
+    int x = 10;
+    MyDebug("okok%d\n",x);
+#if 0
+    MyList list;
+    list.AddTail(new A(10));
+    list.AddTail(new A(11));
+
+    MyList list1;
+    list1.AddTail(new A(90));
+    list1.AddTail(new A(2));
+
+    list.Append(&list1);
+
+    MyNode* begin = list.GetData(0);
+
+    for(int i = 0; i < list.Count(); ++i)
+    {
+        std::cout << ((A*)begin)->a << std::endl;
+        begin = begin->next;
+    }
+#endif
+    return 0;
 }
 #else
 #if 1
 // server
 int main(int argc, char *argv[])
 {
-    MySock server("",19999);
+    MyApp app;
+
+    app.Exec();
+#if 0
+    MyTcp server("",19999);
     server.Bind();
     server.Listen(10);
     int fd = server.Accpet(NULL,NULL);
@@ -31,13 +62,14 @@ int main(int argc, char *argv[])
         printf("read %d byte : %s\n",res,buf);
         memset(buf,0,20);
     }
+#endif
     return 0;
 }
 #else
 // client
 int main(int argc, char *argv[])
 {
-    MySock client("127.0.0.1",19999,SOCK_STREAM,false);
+    MyTcp client("127.0.0.1",19999,false);
     client.Connect();
 
     char buf[20] = {0};

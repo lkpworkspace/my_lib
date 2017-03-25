@@ -9,7 +9,8 @@ public:
 	MyThread();
 	~MyThread();
 	virtual void Run() = 0;
-	virtual void OnExit(){};
+	virtual void OnInit(){}
+	virtual void OnExit(){}
 	void Start();
 	void Stop();
 public:

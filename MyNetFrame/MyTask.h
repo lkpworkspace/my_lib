@@ -7,7 +7,7 @@
 
 namespace my_master {
 #define MSG_LEN 1
-class MyTask : public MyThread
+class MyTask : public my_master::MyThread, public my_master::MyEvent
 {
     friend class MyApp;
 public:
@@ -23,20 +23,27 @@ public:
     void Run();    // override
     void OnInit(); // override
     void OnExit(); // override
+    ////////////////////////////////////////////// override MyEvent method
+    int GetEventFd(){return m_msgFd[1];}
+    EVENT_TYPE GetEventType(){return EVENT_TYPE::TASK;}
+    uint32_t GetEpollEventType(){ return EPOLLIN; }
 
     int SendMsg(const uint8_t* buf, int len);   // invoke by MyApp
     int WaitMsg(uint8_t *buf, int len);         // invoke by myself
     int ProcessMsg();                           // process MyApp event
 private:
+    int TaskWork();
     int CreateSockPair();   // communication between thread
     void ClearResource();
     void ErrorProcess();
 private:
+    my_master::MyList m_recv;            // recv queue
+    my_master::MyList m_que;             // work queue, save MyEvent class
+
     TASK_STATUS m_status;                // current thread runing status
     int m_msgFd[2];                      // 0 used by myself, 1 used by MyApp
-    my_master::MyList<MyEvent*> m_que;   // task queue
     uint8_t m_msgBuf[MSG_LEN];
-    sem_t m_event;
+    //sem_t m_event;
 };
 
 } // end namespace
