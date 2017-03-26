@@ -4,13 +4,10 @@
 using namespace my_master;
 MyTask::MyTask()
 {
-    m_status = TASK_STATUS::STOP;
     m_msgFd[0] = -1;
     m_msgFd[1] = -1;
     memset(m_msgBuf,0,MSG_LEN);
     //sem_init(&m_event,0,0);
-    m_que.Clear(true);
-    m_recv.Clear(true);
     CreateSockPair();
     this->Start();
 }
@@ -18,39 +15,35 @@ MyTask::~MyTask(){ClearResource();}
 ////////////////////////////////////////////////////Runing thread
 void MyTask::Run()
 {
-    memset(m_msgBuf,0,MSG_LEN);
-    if(WaitMsg(m_msgBuf,MSG_LEN) > 0)
-    {
-        // TODO...
-        TaskWork();
-    }else
-    {
-        this->Stop();
-        m_status = TASK_STATUS::ERROR;
-    }
+    WaitEvent();
+    TaskWork();
 }
 int MyTask::TaskWork()
 {
+#if 1
     // TODO...
-#if 0
-    while(!m_que.IsEmpty())
+    MyEvent* begin = (MyEvent*)m_que.Begin();
+    MyEvent* end = (MyEvent*)m_que.End();
+    while(begin != end)
     {
-
+        begin->m_callback(begin);
+        m_que.Del((MyNode*)begin,false);
+        begin = (MyEvent*)(begin->next);
     }
 #endif
+#if 1
     printf("task %d work...\n",GetThreadId());
+#endif
     return 0;
 }
 ////////////////////////////////////////////////////TODO...
-int MyTask::SendMsg(const uint8_t* buf, int len)
+int MyTask::WaitEvent()
 {
-    // process event
-    return write(m_msgFd[1],buf,len);
-}
-
-int MyTask::WaitMsg(uint8_t* buf, int len)
-{
-    return read(m_msgFd[0],buf,len);
+    // send to MyApp, this task idle
+    m_msgBuf[0] = 0x01;
+    write(m_msgFd[0],m_msgBuf,MSG_LEN);
+    // wait MyApp trans event
+    return read(m_msgFd[0],m_msgBuf,MSG_LEN);
 }
 void MyTask::OnInit()
 {
@@ -83,15 +76,21 @@ int MyTask::CreateSockPair()
     printf("create socketpair %d\n",res);
 #endif
     Common::SetNonblock(m_msgFd[0],false);
-    Common::SetNonblock(m_msgFd[1],true);
+    Common::SetNonblock(m_msgFd[1],false);
     return res;
 }
-////////////////////////////////////////////////////assist function
-void MyTask::ErrorProcess()
+////////////////////////////////////////////////////
+/// MyApp communication with this class
+int MyTask::SendMsg(const char* buf, int len)
 {
-    ClearResource();
-    m_status = TASK_STATUS::ERROR;
+    return write(m_msgFd[1],buf,len);
 }
+int MyTask::RecvMsg(char* buf, int len)
+{
+    return read(m_msgFd[1],buf,len);
+}
+////////////////////////////////////////////////////
+/// assist function
 void MyTask::ClearResource()
 {
     this->Stop();

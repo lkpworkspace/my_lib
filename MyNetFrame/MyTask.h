@@ -28,19 +28,19 @@ public:
     EVENT_TYPE GetEventType(){return EVENT_TYPE::TASK;}
     uint32_t GetEpollEventType(){ return EPOLLIN; }
 
-    int SendMsg(const uint8_t* buf, int len);   // invoke by MyApp
-    int WaitMsg(uint8_t *buf, int len);         // invoke by myself
+    int SendMsg(const char *buf, int len);   // invoke by MyApp
+    int RecvMsg(char *buf, int len);            // invoke by MyApp
+    int WaitEvent();                            // invoke by myself
     int ProcessMsg();                           // process MyApp event
 private:
     int TaskWork();
     int CreateSockPair();   // communication between thread
     void ClearResource();
-    void ErrorProcess();
 private:
     my_master::MyList m_recv;            // recv queue
     my_master::MyList m_que;             // work queue, save MyEvent class
 
-    TASK_STATUS m_status;                // current thread runing status
+    //TASK_STATUS m_status;                // current thread runing status
     int m_msgFd[2];                      // 0 used by myself, 1 used by MyApp
     uint8_t m_msgBuf[MSG_LEN];
     //sem_t m_event;

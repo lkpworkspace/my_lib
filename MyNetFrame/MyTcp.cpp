@@ -1,31 +1,88 @@
 #include "MyTcp.h"
+#include "MyApp.h"
+
 using namespace my_master;
-MyTcp::MyTcp(std::string ip, uint16_t port, bool isServer)
-    :MySock(ip,port,SOCK_STREAM,isServer)
-{}
-MyTcp::~MyTcp()
-{}
-//////////////////////////////////////////////////// client
-int MyTcp::Read(char* buf,int len)
+void* callfunc_tcp_server(void* ev)
 {
-    if(IS_SERVER(this->m_tcp_ip_type))
+    // TODO... need debug
+    MyTcpServer* server = (MyTcpServer*)ev;
+    sockaddr_in addr;
+    socklen_t len;
+    MyTcpSocket* tcpSock;
+
+    while(1)
+    {
+        memset(&addr,0,sizeof(addr));
+        int fd = accept(server->GetEventFd(),(sockaddr*)&addr,&len);
+        if(fd < 0)
+        {
+            MyApp::theApp->AddEvent((MyEvent*)ev);
+            break;
+        }
+        tcpSock = new MyTcpSocket(fd,addr);
+        MyApp::theApp->AddEvent(tcpSock);
+    }
+}
+////////////////////////////////////////////////////
+/// MyTcpServer
+
+
+MyTcpServer::MyTcpServer(std::string ip, uint16_t port)
+    :MySock(ip,port,SOCK_STREAM,true)
+{
+    this->SetCallBack(callfunc_tcp_server);
+}
+MyTcpServer::~MyTcpServer()
+{}
+int MyTcpServer::Listen(int backlog)
+{
+    if(!IS_SERVER(m_tcp_ip_type))
+        return 0;
+    int res = -1;
+    //SetNonblock();
+    res = listen(m_sock,backlog);
+    assert(res == 0);
+    return res;
+}
+
+int MyTcpServer::Accpet(struct sockaddr *addr, socklen_t *addrlen)
+{
+    if(!IS_SERVER(m_tcp_ip_type))
+        return 0;
+    int res = accept(m_sock,addr,addrlen);
+    assert(res != -1);
+    return res; // file descriptor
+}
+
+
+
+////////////////////////////////////////////////////
+/// MyTcpClient
+MyTcpClient::MyTcpClient(std::string ip,uint16_t port)
+    :MySock(ip,port,SOCK_STREAM,false)
+{}
+MyTcpClient::~MyTcpClient()
+{}
+
+int MyTcpClient::Read(char* buf,int len)
+{
+    if(IS_SERVER(m_tcp_ip_type))
         return 0;
     return read(m_sock,buf,len);
 }
 
-int MyTcp::Write(char* buf, int len)
+int MyTcpClient::Write(const char* buf, int len)
 {
-    if(IS_SERVER(this->m_tcp_ip_type))
+    if(IS_SERVER(m_tcp_ip_type))
         return 0;
     return write(m_sock,buf,len);
 }
-int MyTcp::Connect()
+int MyTcpClient::Connect()
 {
-    if(IS_SERVER(this->m_tcp_ip_type))
+    if(IS_SERVER(m_tcp_ip_type))
         return -1;
 
     int ret;
-    //struct sockaddr_in addr;
 
     m_addr.sin_family = AF_INET;
     m_addr.sin_port = htons(m_port);
@@ -35,23 +92,14 @@ int MyTcp::Connect()
     assert(ret == 0);
     return ret;
 }
-//////////////////////////////////////////////////// server
-int MyTcp::Listen(int backlog)
+
+///////////////////////////////////////////////////////
+/// MyTcpSocket
+MyTcpSocket::MyTcpSocket(int fd, sockaddr_in addr)
 {
-    if(!IS_SERVER(this->m_tcp_ip_type))
-        return 0;
-    int res = -1;
-    //SetNonblock();
-    res = listen(m_sock,backlog);
-    assert(res == 0);
-    return res;
+    this->m_sock = fd;
+    memcpy(&m_addr,&addr,sizeof(addr));
 }
 
-int MyTcp::Accpet(struct sockaddr *addr, socklen_t *addrlen)
-{
-    if(!IS_SERVER(this->m_tcp_ip_type))
-        return 0;
-    int res = accept(m_sock,addr,addrlen);
-    assert(res != -1);
-    return res; // file descriptor
-}
+MyTcpSocket::~MyTcpSocket()
+{}

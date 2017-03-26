@@ -20,7 +20,7 @@ class MySock : public MyEvent
     friend class MyApp;
 public:
 public:
-    MySock(std::string ip,uint16_t port,int type = SOCK_STREAM, bool isServer = true);
+    MySock(std::string ip,uint16_t port,int type, bool isServer = true);
     ~MySock(){Close();}
     //////////////////////////////////// override MyEvent method
     int GetEventFd(){ return m_sock; }
@@ -30,8 +30,9 @@ public:
     int Bind();
     int Close();
     int SetNonblock(bool b = true);
-public:
-    uint8_t m_tcp_ip_type;          // tcp/udp or server/client.
+    uint8_t GetSocketType(){return m_tcp_ip_type;}
+protected:
+    uint8_t m_tcp_ip_type;         // tcp/udp or server/client.
     int m_sock;                    // socket file descritor.
     std::string m_ip;              // if server, bind ip; if client, connect ip.
     uint16_t m_port;               // if server, bind port; if client, connect port.

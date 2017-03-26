@@ -62,12 +62,15 @@ public:
     ////////////////////////////////////
     void AddHead(MyNode* node);
     void AddTail(MyNode* node);
+    void Del(MyNode* node, bool b = false);
     void DelHead(bool b = false);
     void DelTail(bool b = false);
     void DelWithIndex(int index,bool b = false);
     void MoveHead(MyNode* node);
     void MoveTail(MyNode* node);
     void Append(MyList* from);
+    MyNode* Begin(){return GetData(0);}
+    MyNode* End(){return &m_root;}
 public:
     MyNode* GetData(int index);
     int Count(){return m_count;}
@@ -77,7 +80,6 @@ private:
     void __Init();
     void __Add(MyNode* prev, MyNode* next, MyNode* node);
     void __Del(MyNode* prev, MyNode* next, bool b);
-    void Del(MyNode* node, bool b = true);
 
     MyNode m_root;
     int m_count;

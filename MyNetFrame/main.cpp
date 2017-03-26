@@ -45,7 +45,10 @@ int main()
 // server
 int main(int argc, char *argv[])
 {
-    MyApp app;
+    MyApp app{1,1024};
+
+    MyTcpServer *server = new MyTcpServer("",9999);
+    app.AddEvent(server);
 
     app.Exec();
 #if 0

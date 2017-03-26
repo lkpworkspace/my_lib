@@ -2,8 +2,8 @@
 #define MYEVENT_H
 #include "Common.h"
 #include <sys/epoll.h>
+typedef void*(*callback_t)(void*);
 namespace my_master {
-typedef void(*callback_t)(void*);
 
 class MyEvent : public MyNode
 {
@@ -11,6 +11,7 @@ class MyEvent : public MyNode
     friend class MyApp;
 public:
     enum EVENT_TYPE{
+        FILE,
         SOCK,
         TASK,
         NONE

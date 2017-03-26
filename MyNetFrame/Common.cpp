@@ -65,3 +65,15 @@ char* Common::GetHomeDir()
 {
     return getenv("HOME");
 }
+
+uint64_t Common::GetTimerNow()
+{
+    uint64_t now;
+
+    struct timespec ts;
+    clock_gettime(CLOCK_REALTIME, &ts);
+
+    now = ts.tv_sec * 1000;
+    now += ts.tv_nsec / 1000000;
+    return now;
+}

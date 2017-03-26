@@ -55,6 +55,7 @@ public:
     static bool IsFileExist(const char* path);
     static bool IsDirExist(const char* path);
     static char* GetHomeDir();
+    static uint64_t GetTimerNow();
 private:
     Common();
     ~Common();

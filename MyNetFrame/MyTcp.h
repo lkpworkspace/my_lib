@@ -5,18 +5,43 @@
 
 namespace my_master {
 
-class MyTcp : public my_master::MySock
+class MyTcpServer : public my_master::MySock
 {
 public:
-    MyTcp(std::string ip,uint16_t port, bool isServer = true);
-    ~MyTcp();
-    //////////////////////////////////// override MySock method, client used
-    int Read(char* buf, int len);
-    int Write(char*buf,int len);
+    MyTcpServer(std::string ip,uint16_t port);
+    ~MyTcpServer();
+
+    //static void* CallFunc(void*);
 
     int Listen(int backlog = 10);// ok
-    int Connect(); // ok
-    int Accpet(struct sockaddr *addr, socklen_t *addrlen); // ok
+    int Accpet(struct sockaddr *addr, socklen_t *addrlen); // do nothing
+};
+
+class MyTcpClient : public my_master::MySock
+{
+public:
+    MyTcpClient(std::string ip,uint16_t port);
+    ~MyTcpClient();
+    int Read(char* buf, int len);
+    int Write(const char *buf, int len);
+    int Connect();
+};
+
+class MyTcpSocket : public my_master::MyEvent
+{
+public:
+    MyTcpSocket(int fd, sockaddr_in addr);
+    ~MyTcpSocket();
+    //////////////////////////////////// override MyEvent method
+    int GetEventFd(){ return m_sock; }
+    EVENT_TYPE GetEventType(){ return EVENT_TYPE::SOCK; }
+    uint32_t GetEpollEventType(){ return EPOLLIN; }
+
+    int Read(char* buf, int len);
+    int Write(char*buf,int len);
+private:
+    int m_sock;
+    sockaddr_in m_addr;
 };
 
 } // end namespace
