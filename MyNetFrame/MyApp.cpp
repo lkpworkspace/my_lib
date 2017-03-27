@@ -17,6 +17,7 @@ MyApp::~MyApp()
 {}
 int MyApp::InitApp()
 {
+    pthread_mutex_init(&m_app_mutex,NULL);
     // epoll create
     m_epollFd = epoll_create(m_evSize);
 #ifdef USE_LOG
@@ -35,22 +36,28 @@ int MyApp::InitApp()
 int MyApp::CreateTask()
 {
     // TODO...
+
     MyTask* task = new MyTask;
     m_idle_tasks.AddTail(task);
-    m_tasks.AddTail(task);
+    m_tasks.push_back(task);
     this->AddEvent(task);
 
+    pthread_mutex_lock(&m_app_mutex);
     ++m_cur_thread_size;
+    pthread_mutex_unlock(&m_app_mutex);
     return 0;
 }
 int MyApp::AddEvent(MyEvent* ev)
 {
     // TODO...
     struct epoll_event event;
+    int res;
 
+    pthread_mutex_lock(&m_app_mutex);
     event.data.ptr = ev;
     event.events = ev->GetEpollEventType();
-    int res = epoll_ctl(m_epollFd,EPOLL_CTL_ADD,ev->GetEventFd(),&event);
+    if(epoll_ctl(m_epollFd,EPOLL_CTL_MOD,ev->GetEventFd(),&event) < 0)
+        res = epoll_ctl(m_epollFd,EPOLL_CTL_ADD,ev->GetEventFd(),&event);
 #ifdef USE_LOG
     if(res)
         MyDebug("add event fail %d",res);
@@ -60,10 +67,12 @@ int MyApp::AddEvent(MyEvent* ev)
         printf("add event fail %d\n",res);
 #endif
     ++m_cur_ev_size;
+    pthread_mutex_unlock(&m_app_mutex);
     return res;
 }
 int MyApp::DelEvent(MyEvent* ev)
 {
+    pthread_mutex_lock(&m_app_mutex);
     int res = epoll_ctl(m_epollFd,EPOLL_CTL_DEL,ev->GetEventFd(),NULL);
 #ifdef USE_LOG
     if(res)
@@ -74,6 +83,7 @@ int MyApp::DelEvent(MyEvent* ev)
         printf("del event fail %d\n", res);
 #endif
     --m_cur_ev_size;
+    pthread_mutex_unlock(&m_app_mutex);
     return res;
 }
 int MyApp::Exec()
@@ -107,6 +117,7 @@ int MyApp::TimerCheck()
 void MyApp::CheckStopTask()
 {
     char ch = 'y';
+#if 1
     MyTask* begin;
     MyTask* end;
 
@@ -137,8 +148,45 @@ void MyApp::CheckStopTask()
             // be careful with this operator
             begin->SendMsg(&ch,MSG_LEN);
         }
-        begin = (MyTask*)begin->next;
+        begin = (MyTask*)(begin->next);
     }
+#else
+    MyNode* begin;
+    MyNode* end;
+
+    begin= m_idle_tasks.Begin();
+    end = m_idle_tasks.End();
+    printf("end pointer %p\n",end);
+    for(;begin != end;)
+    {
+        // move MyTask recv queue to MyTask work queue
+        // delete from idle task queue
+        // weakup this task, continue
+        // TODO...
+        if(!((MyTask*)begin)->m_recv.IsEmpty())
+        {
+            ((MyTask*)begin)->m_que.Append(&((MyTask*)begin)->m_recv);
+            // be careful with this operator
+            m_idle_tasks.Del(begin,false);
+            ((MyTask*)begin)->SendMsg(&ch,MSG_LEN);
+            begin = begin->next;
+            continue;
+        }
+        // move MyApp recv queue to MyTask work queue
+        // weak up this task
+        // TODO...
+        if(!m_ev_recv.IsEmpty())
+        {
+            ((MyTask*)begin)->m_que.Append(&m_ev_recv);
+            m_idle_tasks.Del(begin,false);
+            // be careful with this operator
+            ((MyTask*)begin)->SendMsg(&ch,MSG_LEN);
+        }
+        printf("begin pointer %p\n",begin);
+        begin = begin->next;
+        printf("begin pointer %p\n",begin);
+    }
+#endif
 }
 void MyApp::HandleEvent(struct epoll_event* epev, int count)
 {

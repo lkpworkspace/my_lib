@@ -2,8 +2,9 @@
 #define MYAPP_H
 #include "Common.h"
 #include <sys/epoll.h>
+#include <pthread.h>
 namespace my_master {
-
+class MyTask;
 class MyApp : public MyThread
 {
 public:
@@ -26,9 +27,10 @@ private:
     void HandleEvent(struct epoll_event* epev, int count);
     void HandleTaskEvent(MyEvent*);
 private:
-    my_master::MyList m_tasks;         // save MyTask class
+    std::vector<MyTask*> m_tasks;      // save MyTask class
     my_master::MyList m_idle_tasks;    // save MyTask class
     my_master::MyList m_ev_recv;       // recv task event, save MyEvent class
+    pthread_mutex_t m_app_mutex;
     int m_epollFd;                     // listen Event file des
     int m_evSize;                      // can be listened (const var)
     int m_threadSize;                  // thread size (const var)

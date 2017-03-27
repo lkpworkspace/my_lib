@@ -1,4 +1,5 @@
 #include "MyTask.h"
+#include "MyApp.h"
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>
 using namespace my_master;
@@ -26,8 +27,10 @@ int MyTask::TaskWork()
     MyEvent* end = (MyEvent*)m_que.End();
     while(begin != end)
     {
-        begin->m_callback(begin);
-        m_que.Del((MyNode*)begin,false);
+        begin->CallBackFunc(begin);
+        //m_que.Del((MyNode*)begin,false);
+        // need debug
+        MyApp::theApp->AddEvent(begin);
         begin = (MyEvent*)(begin->next);
     }
 #endif

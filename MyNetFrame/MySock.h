@@ -26,6 +26,7 @@ public:
     int GetEventFd(){ return m_sock; }
     EVENT_TYPE GetEventType(){ return EVENT_TYPE::SOCK; }
     uint32_t GetEpollEventType(){ return EPOLLIN; }
+    virtual void* CallBackFunc(MyEvent *){ return NULL; }
 public:
     int Bind();
     int Close();

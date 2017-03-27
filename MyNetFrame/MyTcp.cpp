@@ -25,13 +25,9 @@ void* callfunc_tcp_server(void* ev)
 }
 ////////////////////////////////////////////////////
 /// MyTcpServer
-
-
 MyTcpServer::MyTcpServer(std::string ip, uint16_t port)
     :MySock(ip,port,SOCK_STREAM,true)
-{
-    this->SetCallBack(callfunc_tcp_server);
-}
+{}
 MyTcpServer::~MyTcpServer()
 {}
 int MyTcpServer::Listen(int backlog)
@@ -50,7 +46,6 @@ int MyTcpServer::Accpet(struct sockaddr *addr, socklen_t *addrlen)
     if(!IS_SERVER(m_tcp_ip_type))
         return 0;
     int res = accept(m_sock,addr,addrlen);
-    assert(res != -1);
     return res; // file descriptor
 }
 
@@ -103,3 +98,13 @@ MyTcpSocket::MyTcpSocket(int fd, sockaddr_in addr)
 
 MyTcpSocket::~MyTcpSocket()
 {}
+
+int MyTcpSocket::Read(char* buf,int len)
+{
+    return read(m_sock,buf,len);
+}
+
+int MyTcpSocket::Write(const char* buf, int len)
+{
+    return write(m_sock,buf,len);
+}

@@ -27,11 +27,12 @@ public:
     int GetEventFd(){return m_msgFd[1];}
     EVENT_TYPE GetEventType(){return EVENT_TYPE::TASK;}
     uint32_t GetEpollEventType(){ return EPOLLIN; }
+    void* CallBackFunc(MyEvent *){return NULL;}
 
-    int SendMsg(const char *buf, int len);   // invoke by MyApp
+    int SendMsg(const char *buf, int len);      // invoke by MyApp
     int RecvMsg(char *buf, int len);            // invoke by MyApp
     int WaitEvent();                            // invoke by myself
-    int ProcessMsg();                           // process MyApp event
+    int ProcessMsg();                           // process MyApp event(do not use)
 private:
     int TaskWork();
     int CreateSockPair();   // communication between thread

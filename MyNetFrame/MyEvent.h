@@ -2,9 +2,9 @@
 #define MYEVENT_H
 #include "Common.h"
 #include <sys/epoll.h>
-typedef void*(*callback_t)(void*);
-namespace my_master {
 
+namespace my_master {
+//typedef void*(*callback_t)(void*);
 class MyEvent : public MyNode
 {
     friend class MyTask;
@@ -22,9 +22,8 @@ public:
     virtual int GetEventFd() = 0;
     virtual EVENT_TYPE GetEventType() = 0;
     virtual uint32_t GetEpollEventType() = 0;
-    void SetCallBack(callback_t cb);
-private:
-    callback_t m_callback;
+    virtual void* CallBackFunc(MyEvent*) = 0;
+    //void SetCallBack(callback_t cb);
 };
 
 } // end namespace
