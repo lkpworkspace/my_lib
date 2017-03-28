@@ -22,21 +22,16 @@ void MyTask::Run()
 int MyTask::TaskWork()
 {
 #if 1
-    // TODO...
+    printf("task %d work, has %d event\n",GetThreadId(),m_que.Count());
+#endif
     MyEvent* begin = (MyEvent*)m_que.Begin();
     MyEvent* end = (MyEvent*)m_que.End();
     while(begin != end)
     {
         begin->CallBackFunc(begin);
-        //m_que.Del((MyNode*)begin,false);
-        // need debug
-        MyApp::theApp->AddEvent(begin);
+        m_que.Del((MyNode*)begin,false);
         begin = (MyEvent*)(begin->next);
     }
-#endif
-#if 1
-    printf("task %d work...\n",GetThreadId());
-#endif
     return 0;
 }
 ////////////////////////////////////////////////////TODO...
@@ -45,6 +40,9 @@ int MyTask::WaitEvent()
     // send to MyApp, this task idle
     m_msgBuf[0] = 0x01;
     write(m_msgFd[0],m_msgBuf,MSG_LEN);
+#if 1
+    printf("task %d waiting...\n",GetThreadId());
+#endif
     // wait MyApp trans event
     return read(m_msgFd[0],m_msgBuf,MSG_LEN);
 }

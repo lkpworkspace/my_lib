@@ -88,7 +88,7 @@ void MyList::Append(MyList *from)
 
 MyNode* MyList::GetData(int index)
 {
-    if(IsEmpty()) return nullptr;
+    if(IsEmpty()) return &m_root;
     if(index < 0 || index >= m_count) return nullptr;
 
     MyNode* temp = &m_root;

@@ -36,9 +36,8 @@ int MyApp::InitApp()
 int MyApp::CreateTask()
 {
     // TODO...
-
     MyTask* task = new MyTask;
-    m_idle_tasks.AddTail(task);
+    //m_idle_tasks.AddTail(task);
     m_tasks.push_back(task);
     this->AddEvent(task);
 
@@ -100,6 +99,9 @@ int MyApp::Exec()
         res = epoll_wait(m_epollFd,ev,evc,wait);
         if(res > 0)
         {
+#if 1
+            printf("Exec get %d event\n",res);
+#endif
             HandleEvent(ev,res);
         }
     }
@@ -224,11 +226,12 @@ void MyApp::HandleTaskEvent(MyEvent* ev)
         // task need event
         if(!task->m_recv.IsEmpty())
         {
-            task->m_que.Append(&task->m_recv);
+            task->m_que.Append(&(task->m_recv));
             task->SendMsg(&ch,MSG_LEN);
         }else if(!m_ev_recv.IsEmpty())
         {
-            task->m_que.Append(&m_idle_tasks);
+            // change m_idle_tasks to m_ev_recv
+            task->m_que.Append(&m_ev_recv);
             task->SendMsg(&ch,MSG_LEN);
         }else
         {

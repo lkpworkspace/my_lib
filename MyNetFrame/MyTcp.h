@@ -4,7 +4,7 @@
 #include "MySock.h"
 
 namespace my_master {
-
+class MyTcpSocket;
 class MyTcpServer : public my_master::MySock
 {
 public:
@@ -16,8 +16,9 @@ public:
     /// virtual method
     virtual void* CallBackFunc(MyEvent *){return NULL;}
 
-    int Listen(int backlog = 10);// ok
-    int Accpet(struct sockaddr *addr, socklen_t *addrlen); // do nothing
+    //MyTcpSocket GetConnect();
+    int Listen(int backlog = 10);
+    int Accpet(struct sockaddr_in *addr, socklen_t *addrlen);
 };
 
 class MyTcpClient : public my_master::MySock
@@ -39,6 +40,7 @@ class MyTcpSocket : public my_master::MyEvent
 {
 public:
     MyTcpSocket(int fd, sockaddr_in addr);
+    MyTcpSocket(const MyTcpSocket& other);
     ~MyTcpSocket();
     ////////////////////////////////////
     /// override MyEvent method
@@ -49,6 +51,7 @@ public:
     /// virtual method
     virtual void* CallBackFunc(MyEvent *){return NULL;}
 
+    MyTcpSocket& operator=(MyTcpSocket& other);
     int Read(char*, int);
     int Write(const char*,int);
 private:

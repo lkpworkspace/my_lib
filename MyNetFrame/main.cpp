@@ -41,6 +41,37 @@ int main()
 #else
 #if 1
 // server
+class MyRecv : public MyTcpSocket
+{
+public:
+    MyRecv(int fd, sockaddr_in addr)
+        :MyTcpSocket(fd,addr)
+    {
+        Common::SetNonblock(fd,true);
+    }
+
+    void* CallBackFunc(MyEvent *ev)
+    {
+        char buf[1024] = {0};
+        /* res:
+         * =0 client quit
+         * >0 data is coming
+         * <0 end of file
+        */
+        int res;
+        MyTcpSocket* sock = (MyTcpSocket*)ev;
+        do
+        {
+            res = sock->Read(buf,1024);
+            printf("read %d:%s\n",res,buf);
+        }while(res > 0);
+        if(res != 0)
+            MyApp::theApp->AddEvent(ev);
+        else
+            printf("client quit\n");
+    }
+};
+
 class MyServer: public MyTcpServer
 {
 public:
@@ -54,45 +85,30 @@ public:
 
     void* CallBackFunc(MyEvent *ev)
     {
-        printf("Get client connect\n");
         MyTcpServer* serv = (MyTcpServer*)ev;
+        sockaddr_in addr;
+        socklen_t len;
         while(1)
         {
-            int fd = serv->Accpet(NULL,NULL);
+            int fd = serv->Accpet(&addr,&len);
             if(fd < 0)
                 break;
-            write(fd,"heheda",6);
+            MyRecv *recv = new MyRecv(fd,addr);
+            printf("get client fd : %d\n",fd);
+            MyApp::theApp->AddEvent(recv);
         }
-        printf("accept is hahaha\n");
+        MyApp::theApp->AddEvent(ev);
     }
 };
 
 int main(int argc, char *argv[])
 {
-    MyApp app{1,1024};
+    MyApp app{2,1024};
+
     MyServer *server = new MyServer("",9999);
-
     app.AddEvent(server);
-    //MyTcpServer *server = new MyTcpServer("",9999);
-    //app.AddEvent(server);
 
-    app.Exec();
-#if 0
-    MyTcp server("",19999);
-    server.Bind();
-    server.Listen(10);
-    int fd = server.Accpet(NULL,NULL);
-
-    char buf[20] = {0};
-    int res = 0;
-    while(true)
-    {
-        res = read(fd,buf,20);
-        printf("read %d byte : %s\n",res,buf);
-        memset(buf,0,20);
-    }
-#endif
-    return 0;
+    return app.Exec();
 }
 #else
 // client

@@ -35,20 +35,26 @@ int MyTcpServer::Listen(int backlog)
     if(!IS_SERVER(m_tcp_ip_type))
         return 0;
     int res = -1;
-    //SetNonblock();
     res = listen(m_sock,backlog);
     assert(res == 0);
     return res;
 }
 
-int MyTcpServer::Accpet(struct sockaddr *addr, socklen_t *addrlen)
+int MyTcpServer::Accpet(struct sockaddr_in *addr, socklen_t *addrlen)
 {
     if(!IS_SERVER(m_tcp_ip_type))
         return 0;
-    int res = accept(m_sock,addr,addrlen);
+    int res = accept(m_sock,(sockaddr*)addr,addrlen);
     return res; // file descriptor
 }
-
+//MyTcpSocket MyTcpServer::GetConnect()
+//{
+//    sockaddr_in addr;
+//    socklen_t len;
+//    int fd = Accpet(&addr,&len);
+//    MyTcpSocket client(fd,addr);
+//    return client;
+//}
 
 
 ////////////////////////////////////////////////////
@@ -95,9 +101,21 @@ MyTcpSocket::MyTcpSocket(int fd, sockaddr_in addr)
     this->m_sock = fd;
     memcpy(&m_addr,&addr,sizeof(addr));
 }
+MyTcpSocket::MyTcpSocket(const MyTcpSocket& other)
+{
+    memcpy(&m_addr,&other.m_addr,sizeof(m_addr));
+    m_sock = other.m_sock;
+}
 
 MyTcpSocket::~MyTcpSocket()
 {}
+
+MyTcpSocket& MyTcpSocket::operator=(MyTcpSocket& other)
+{
+    memcpy(&m_addr,&other.m_addr,sizeof(m_addr));
+    m_sock = other.m_sock;
+    return *this;
+}
 
 int MyTcpSocket::Read(char* buf,int len)
 {
