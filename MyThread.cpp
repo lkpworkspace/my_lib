@@ -2,44 +2,38 @@
 
 MyThread::MyThread()
 {
-	hThr_ = INVALID_HANDLE_VALUE;
-	bExit_ = true;
-	InitializeCriticalSection(&gg_cs);
+	thread_ = nullptr;
+	isRuning_ = false;
 }
 
 MyThread::~MyThread()
-{
-	DeleteCriticalSection(&gg_cs);
-}
+{}
 
-bool MyThread::StartThread()
+void MyThread::Start()
 {
-	bExit_ = false;
-	if (hThr_ != INVALID_HANDLE_VALUE) return false;
-	UINT threadID;
-	hThr_ = (HANDLE)_beginthreadex(NULL, 0, ListenThread, this, 0, &threadID);
-	if (!hThr_) return false;
-	return true;
-}
-
-bool MyThread::StopThread()
-{
-	if (hThr_ != INVALID_HANDLE_VALUE && !bExit_)
+	if (!thread_)
 	{
-		bExit_ = true;
-		Sleep(100);
-		CloseHandle(hThr_);
-		hThr_ = INVALID_HANDLE_VALUE;
-	}
-	return true;
+		isRuning_ = true;
+		thread_ = new std::thread(&MyThread::ListenThread,this);
+		thread_->detach();
+	}	
 }
 
-UINT WINAPI MyThread::ListenThread(void* param)
+void MyThread::Stop()
 {
-	MyThread* pThis = reinterpret_cast<MyThread*>(param);
-	while (!pThis->bExit_)
+	isRuning_ = false;
+	if (thread_)
+		delete thread_;
+	thread_ = nullptr;
+}
+
+void MyThread::ListenThread(void* obj)
+{
+	MyThread* t = (MyThread*)obj;
+	t->OnInit();
+	while (t->isRuning_)
 	{
-		pThis->RunThread();
+		t->Run();
 	}
-	return 0;
+	t->OnExit();
 }

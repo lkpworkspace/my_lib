@@ -4,7 +4,6 @@
 #include <wchar.h>
 #include <string.h>
 #include <stdlib.h>
-#include <windows.h>
 #include <queue>
 #include "hidapi.h"
 #include <stdint.h>

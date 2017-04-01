@@ -1,28 +1,25 @@
 #ifndef __MyThread_H__
 #define __MyThread_H__
-
-#include <process.h>
-#include <stdint.h>
-#include <Windows.h>
+#include <thread>
+#include <mutex>
 
 class MyThread
 {
 public:
 	MyThread();
 	~MyThread();
-
-	virtual void RunThread() = 0;
-	bool StartThread();
-	bool StopThread();
-	CRITICAL_SECTION gg_cs;
-
+	virtual void Run() = 0;
+	virtual void OnInit(){}
+	virtual void OnExit(){}
+	void Start();
+	void Stop();
+public:
+	std::mutex mutex_;
 protected:
-	static UINT WINAPI ListenThread(void* param);
-
+	static void ListenThread(void*);
 private:
-	bool bExit_;
-	HANDLE hThr_;
+	std::thread* thread_;
+	bool isRuning_;
 };
-
 
 #endif
