@@ -1,4 +1,4 @@
-#ifndef __MyWin32Help_H__
+﻿#ifndef __MyWin32Help_H__
 #define __MyWin32Help_H__
 #include <Windows.h>
 #include <TlHelp32.h>
@@ -9,7 +9,7 @@
 class MyWin32Help
 {
 public:
-	//�жϸ�id�Ľ����Ƿ����
+	//判断该id的进程是否存在
 	static bool IsExistFromProcessId(DWORD id)
 	{
 		PROCESSENTRY32 pe;
@@ -30,7 +30,7 @@ public:
 		return false;
 	}
 
-	// �߾�������
+	// 高精度休眠
 	static int HiResSleep(int msecs)
 	{
 		HANDLE hTempEvent = CreateEvent(0, true, FALSE, L"TEMP_EVENT");
@@ -40,7 +40,7 @@ public:
 		return 0;
 	}
 
-	// ��õ�ǰʱ��
+	// 获得当前时间
 	static std::string GetCurTime()
 	{
 		SYSTEMTIME sys;
@@ -57,6 +57,23 @@ public:
 			sys.wMilliseconds);
 		return std::string(buf);
 	}
+
+	// 高精度计时
+	static LARGE_INTEGER GetCurClockCount()
+	{
+		LARGE_INTEGER m_nFreq;
+		LARGE_INTEGER m_nBeginTime;
+		QueryPerformanceFrequency(&m_nFreq); // 获取时钟周期  
+		QueryPerformanceCounter(&m_nBeginTime);// 获取时钟计数 
+		return m_nBeginTime;
+	}
+	static double GetInervalTime(LARGE_INTEGER begin, LARGE_INTEGER end)
+	{
+		LARGE_INTEGER m_nFreq;
+		QueryPerformanceFrequency(&m_nFreq);
+		return (double)(end.QuadPart - begin.QuadPart) * 1000 / m_nFreq.QuadPart;
+	}
+
 
 };
 

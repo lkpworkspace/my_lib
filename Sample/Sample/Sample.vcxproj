@@ -143,15 +143,16 @@
     <ClCompile Include="..\..\hid.c" />
     <ClCompile Include="..\..\MyHelp.cpp" />
     <ClCompile Include="..\..\MyHid.cpp" />
-    <ClCompile Include="..\..\MyLog.cpp" />
+    <ClCompile Include="..\..\windows\MyThread.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\hidapi.h" />
     <ClInclude Include="..\..\MyHelp.h" />
     <ClInclude Include="..\..\MyHid.h" />
-    <ClInclude Include="..\..\MyLog.h" />
     <ClInclude Include="..\..\MyWin32Help.h" />
+    <ClInclude Include="..\..\windows\MyThread.h" />
+    <ClInclude Include="..\..\windows\MyWin32Help.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

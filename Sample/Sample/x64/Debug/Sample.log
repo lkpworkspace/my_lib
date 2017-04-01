@@ -1,59 +1,19 @@
-﻿Build started 2017/3/1 13:56:14.
-     1>Project "C:\Users\kpli\Desktop\my_lib\Sample\Sample\Sample.vcxproj" on node 2 (Rebuild target(s)).
+﻿Build started 2017/4/2 1:28:11.
+     1>Project "C:\Users\kpli\Desktop\my_lib\Sample\Sample\Sample.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TC /errorReport:prompt ..\..\hid.c
-         hid.c
-     1>..\..\hid.c(638): warning C4267: 'function' : conversion from 'size_t' to 'DWORD', possible loss of data
-     1>..\..\hid.c(681): warning C4267: 'function' : conversion from 'size_t' to 'DWORD', possible loss of data
-     1>..\..\hid.c(735): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-     1>..\..\hid.c(751): warning C4267: 'function' : conversion from 'size_t' to 'ULONG', possible loss of data
-     1>..\..\hid.c(757): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-     1>..\..\hid.c(779): warning C4267: 'function' : conversion from 'size_t' to 'DWORD', possible loss of data
-     1>..\..\hid.c(780): warning C4267: 'function' : conversion from 'size_t' to 'DWORD', possible loss of data
-     1>..\..\hid.c(821): warning C4267: 'function' : conversion from 'size_t' to 'ULONG', possible loss of data
-     1>..\..\hid.c(834): warning C4267: 'function' : conversion from 'size_t' to 'ULONG', possible loss of data
-     1>..\..\hid.c(847): warning C4267: 'function' : conversion from 'size_t' to 'ULONG', possible loss of data
-     1>..\..\hid.c(860): warning C4267: 'function' : conversion from 'size_t' to 'ULONG', possible loss of data
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt ..\..\MyHelp.cpp ..\..\MyHid.cpp ..\..\MyLog.cpp main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /Od /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Debug\\" /Fd"x64\Debug\vc120.pdb" /Gd /TP /errorReport:prompt main.cpp
          main.cpp
-     1>c:\users\kpli\desktop\my_lib\sample\sample\../../MyWin32Help.h(57): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+     1>c:\users\kpli\desktop\my_lib\sample\sample\../../windows/MyWin32Help.h(57): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
                  C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(356) : see declaration of 'sprintf'
-         MyLog.cpp
-     1>..\..\MyLog.cpp(17): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(356) : see declaration of 'sprintf'
-     1>..\..\MyLog.cpp(31): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\time.inl(112) : see declaration of 'localtime'
-     1>..\..\MyLog.cpp(34): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
-     1>..\..\MyLog.cpp(44): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\string.h(112) : see declaration of 'strcpy'
-     1>..\..\MyLog.cpp(50): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(211) : see declaration of 'fopen'
-         MyHid.cpp
-         MyHelp.cpp
-     1>..\..\MyHelp.cpp(49): warning C4996: 'itoa': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _itoa. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdlib.h(937) : see declaration of 'itoa'
-     1>..\..\MyHelp.cpp(55): warning C4996: 'ltoa': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _ltoa. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdlib.h(938) : see declaration of 'ltoa'
-     1>..\..\MyHelp.cpp(61): warning C4996: 'ultoa': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _ultoa. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdlib.h(945) : see declaration of 'ultoa'
-     1>..\..\MyHelp.cpp(70): warning C4267: 'initializing' : conversion from 'size_t' to 'int', possible loss of data
-     1>..\..\MyHelp.cpp(74): warning C4267: '=' : conversion from 'size_t' to 'int', possible loss of data
-     1>..\..\MyHelp.cpp(91): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\time.inl(112) : see declaration of 'localtime'
-     1>..\..\MyHelp.cpp(164): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\stdio.h(356) : see declaration of 'sprintf'
-         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.exe" /INCREMENTAL /NOLOGO setupapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.lib" /MACHINE:X64 x64\Debug\hid.obj
          x64\Debug\MyHelp.obj
          x64\Debug\MyHid.obj
-         x64\Debug\MyLog.obj
+         x64\Debug\MyThread.obj
          x64\Debug\main.obj
-            Creating library C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.lib and object C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.exp
          Sample.vcxproj -> C:\Users\kpli\Desktop\my_lib\Sample\x64\Debug\Sample.exe
-     1>Done Building Project "C:\Users\kpli\Desktop\my_lib\Sample\Sample\Sample.vcxproj" (Rebuild target(s)).
+     1>Done Building Project "C:\Users\kpli\Desktop\my_lib\Sample\Sample\Sample.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:03.05
+Time Elapsed 00:00:00.80

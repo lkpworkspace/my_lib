@@ -27,7 +27,7 @@
     <ClCompile Include="..\..\hid.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\MyLog.cpp">
+    <ClCompile Include="..\..\windows\MyThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +44,10 @@
     <ClInclude Include="..\..\hidapi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\MyLog.h">
+    <ClInclude Include="..\..\windows\MyThread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\windows\MyWin32Help.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
